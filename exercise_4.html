@@ -1,0 +1,72 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Number Guessing Game</title>  
+    <script src="randominteger.js"></script> <!-- Assuming randominteger.js is already set up -->  
+</head>  
+<body>  
+    <h1>Number Guessing Game</h1>  
+    <p>I'm thinking of a number between 1 and 100. Try to guess it!</p>  
+    <p>Guesses left: <span id="guessesLeft">10</span></p>  
+    <p>Previous Guesses: <span id="previousGuesses"></span></p>  
+    <input type="number" id="playerGuess" min="1" max="100" required>  
+    <button onclick="guess()">Guess!</button>  
+    <p id="result"></p>  
+    <button onclick="restartGame()" style="display:none;">Play Again?</button>  
+  
+    <script>  
+        let targetNumber = randomInt(1, 100); // Using the function from Exercise 3  
+        let guesses = 10;  
+        let previousGuesses = [];  
+  
+        function guess() {  
+            const playerGuessInput = document.getElementById('playerGuess');  
+            const playerGuess = parseInt(playerGuessInput.value, 10);  
+  
+            if (isNaN(playerGuess) || playerGuess < 1 || playerGuess > 100) {  
+                alert('Please enter a valid number between 1 and 100.');  
+                return;  
+            }  
+  
+            previousGuesses.push(playerGuess);  
+            document.getElementById('previousGuesses').textContent = previousGuesses.join(', ');  
+  
+            guesses--;  
+            document.getElementById('guessesLeft').textContent = guesses;  
+  
+            if (guesses === 0) {  
+                alert('Out of guesses! The number was ' + targetNumber);  
+                document.getElementById('result').textContent = '';  
+                showRestartButton();  
+                return;  
+            }  
+  
+            const resultElement = document.getElementById('result');  
+            if (playerGuess === targetNumber) {  
+                resultElement.textContent = 'Congratulations! You guessed it right!';  
+                showRestartButton();  
+            } else if (playerGuess < targetNumber) {  
+                resultElement.textContent = 'Too low!';  
+            } else {  
+                resultElement.textContent = 'Too high!';  
+            }  
+  
+            playerGuessInput.value = ''; // Clear the input field  
+        }  
+  
+        function showRestartButton() {  
+            const restartButton = document.querySelector('button[onclick="restartGame()"]');  
+            restartButton.style.display = 'inline';  
+        }  
+  
+        function restartGame() {  
+            location.reload(); // Simplest way to restart the game (reloads the page)  
+            // Alternatively, you could reset the game state without reloading the page  
+            // by setting targetNumber, guesses, and previousGuesses to their initial values  
+            // and updating the DOM accordingly.  
+        }  
+    </script>  
+</body>  
+</html>
